@@ -1,5 +1,21 @@
 using Hiccup, Lazy
 
+# store all relevant information about where a symbol is defined
+type SymbolElement
+  text::UTF8String
+  file::UTF8String
+  line::Int
+  dispfile::UTF8String # humanized file path
+end
+
+function SymbolElement(m::Method)
+  _, decls, file, line = Base.arg_decl_parts(m)
+  signature = [string(x, isempty(T) ? "" : "::", stripparams(T)) for (x, T) in decls]
+  signature = string(m.func.code.name, "(", join(signature, ", "), ")")
+  humpath, path = findpath(string(file))
+  SymbolElement(signature, path, line, humpath)
+end
+
 isuntitled(p) = ismatch(r"^untitled-[\d\w]+(:\d+)?$", p)
 
 realpath′(p) = ispath(p) ? realpath(p) : p
@@ -21,9 +37,14 @@ baselink(path, line) =
   isuntitled(path) ? link(path, line, Text(appendline("untitled", line))) :
   isabspath(path)  ?
     link(path, line, Text(pkgpath(appendline(path, line)))) :
-    link(basepath(path), line, Text(normpath("base/$(appendline(path, line))")))
+    link(basepath(path), line, Text(normpath(joinpath("base", appendline(path, line)))))
 
 stripparams(t) = replace(t, r"\{([A-Za-z, ]*?)\}", "")
+
+findpath(path) =
+  isabspath(path) || isuntitled(path) ?
+    (pkgpath(path), path) :
+    (normpath(joinpath("base", "$path")), basepath(path))
 
 function methodarray(mt::MethodTable)
   defs = Method[]
