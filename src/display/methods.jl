@@ -67,8 +67,9 @@ end
 end
 
 function render(::Underline, f::Function; options = d())
-  torender = [(doc(f) != nothing ? [doc(f)] : [])...,
+  torender = [(doc(f) != nothing ? [doc(f)] : [])...;
               isgeneric(f) ? methods(f) : []]
   d(:type     => :dom,
-    :contents => map(x -> render(Editor(), x), torender))
+    :tag      => :div,
+    :contents => map(x -> render(Editor(), x, options = options), torender))
 end

@@ -24,6 +24,9 @@ render(e::Editor, ::Void; options = d()) =
 render(::Editor, x; options = d()) =
   render(Inline(), Copyable(x), options = options)
 
+render(::Underline, x; options = d()) =
+  render(Editor(), x, options = options)
+
 # Console
 
 render(::Console, x; options = d()) =
