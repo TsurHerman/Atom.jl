@@ -118,8 +118,9 @@ end
 handle("docs") do data
   @destruct [mod || "Main", word] = data
   mod = getthing(mod)
-  result = @errs include_string(mod, word)
-  d(:result => render(Underline(), result))
+  docstring = @errs include_string(mod, "@doc $word")
+  mtable    = @errs include_string(mod, "isgeneric($word) ? methods($word) : []")
+  render(Editor(), DocObj(docstring, mtable))
 end
 
 handle("methods") do data

@@ -4,7 +4,6 @@ import Media: render
 import Hiccup: div
 
 type Inline end
-type Underline end
 type Clipboard end
 
 type Editor end
@@ -24,8 +23,6 @@ render(e::Editor, ::Void; options = d()) =
 render(::Editor, x; options = d()) =
   render(Inline(), Copyable(x), options = options)
 
-render(::Underline, x; options = d()) =
-  render(Editor(), x, options = options)
 
 # Console
 
@@ -40,4 +37,5 @@ include("plots.jl")
 include("view.jl")
 include("objects.jl")
 include("methods.jl")
+include("docs.jl")
 include("errors.jl")

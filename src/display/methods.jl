@@ -65,11 +65,3 @@ end
   Tree(Text("$(m.name) has $(length(ms)) method$(length(ms)==1?"":"s"):"),
        [table(".methods", [tr(td(c(r(a))), td(c(r(b)))) for (a, b) in map(view, ms)])])
 end
-
-function render(::Underline, f::Function; options = d())
-  torender = [(doc(f) != nothing ? [doc(f)] : [])...;
-              isgeneric(f) ? methods(f) : []]
-  d(:type     => :dom,
-    :tag      => :div,
-    :contents => map(x -> render(Editor(), x, options = options), torender))
-end
