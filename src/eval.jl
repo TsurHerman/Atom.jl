@@ -120,7 +120,12 @@ handle("docs") do data
   mod = getthing(mod)
   docstring = @errs include_string(mod, "@doc $word")
   mtable    = @errs include_string(mod, "isgeneric($word) ? methods($word) : []")
-  render(Editor(), DocObj(docstring, mtable))
+  torender = [docstring; mtable]
+  (isa(docstring, EvalError) || isa(mtable, EvalError)) ?
+    d(:error    =>  true) :
+    d(:type     => :dom,
+      :tag      => :div,
+      :contents =>  map(x -> render(Editor(), x), torender))
 end
 
 handle("methods") do data
