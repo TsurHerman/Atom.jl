@@ -4,6 +4,7 @@ import Media: render
 import Hiccup: div
 
 type Inline end
+type Underline end
 type Clipboard end
 
 type Editor end

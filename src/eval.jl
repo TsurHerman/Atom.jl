@@ -117,9 +117,9 @@ end
 
 handle("docs") do data
   @destruct [mod || "Main", word] = data
-  mod = include_string(mod)
-  result = @errs include_string(mod, "@doc $word")
-  d(:result => render(Editor(), result))
+  mod = getthing(mod)
+  result = @errs include_string(mod, word)
+  d(:result => render(Underline(), result))
 end
 
 handle("methods") do data

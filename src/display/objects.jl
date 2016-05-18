@@ -67,3 +67,7 @@ function handleundefs(X::Vector, inds)
   end
   Xout
 end
+
+@render i::Inline md::Base.Markdown.MD begin
+  HTML(Base.Markdown.html(md))
+end
